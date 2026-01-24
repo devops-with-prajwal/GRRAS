@@ -20,7 +20,7 @@ pipeline {
                 sh 'cp target/GRRAS.war /home/prajwal/Downloads/apache-tomcat-11.0.15/webapps'
                 echo "deployment has been done on QA!"
                          }
-                        elif ( "${env.ENVIRONMENT}" == 'UAT' ){
+                        else if ( "${env.ENVIRONMENT}" == 'UAT' ){
                 sh 'cp target/GRRAS.war /home/prajwal/Downloads/apache-tomcat-11.0.15/webapps'
                 echo "deployment has been done on UAT!"
                         }
