@@ -2,13 +2,8 @@ pipeline {
         agent any
 
         parameters {
-                string defaultValue: 'DEV', name: 'ENV'
+                choice(name: 'ENVIRONMENT', choices: ['QA','UAT'], description: 'Pick Environment value')
         }
-
-        triggers {
-                pollSCM '* * * * *'
-        }
-
         stages {
             stage('Checkout') {
                 steps {
@@ -21,14 +16,17 @@ pipeline {
                 stage('Deployment'){
                     steps {
                         script {
-                         if ( env.ENV == 'QA' ){
+                         if ( "${env.ENVIRONMENT}" == 'QA' ){
                 sh 'cp target/GRRAS.war /home/prajwal/Downloads/apache-tomcat-11.0.15/webapps'
-                echo "deployment has been COMPLETED on QA!"
+                echo "deployment has been done on QA!"
                          }
-                        else ( env.ENV == 'UAT' ){
+                        elif ( "${env.ENVIRONMENT}" == 'UAT' ){
                 sh 'cp target/GRRAS.war /home/prajwal/Downloads/apache-tomcat-11.0.15/webapps'
                 echo "deployment has been done on UAT!"
                         }
+                        echo "deployment has been done!"
+                        fi
+
                         }}}
 }}
 
