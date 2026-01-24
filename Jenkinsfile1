@@ -1,0 +1,21 @@
+pipeline {
+	agent any
+	stages{
+		stage(checkout){
+				steps{
+					checkout scm }
+				
+				}
+		stage(Build){
+			steps {
+                          sh '/home/prajwal/Downloads/apache-maven-3.9.12/bin/mvn install'
+                         	}
+			    }	
+		stage(Deployment){
+				 steps {
+                sh 'cp target/GRRAS.war /home/prajwal/Downloads/apache-tomcat-11.0.15/webapps'
+                        }  
+				 }
+				
+}
+}
