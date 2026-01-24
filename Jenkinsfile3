@@ -1,32 +1,37 @@
 pipeline {
-        agent any
+    agent any
 
-        parameters {
-                choice(name: 'ENVIRONMENT', choices: ['QA','UAT'], description: 'Pick Environment value')
+    parameters {
+        choice(name: 'ENVIRONMENT', choices: ['QA', 'UAT'], description: 'Pick Environment value')
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
         }
-        stages {
-            stage('Checkout') {
-                steps {
-                        checkout scm
-                      }}
-                stage('Build') {
-                   steps {
-                         sh '/home/prajwal/Downloads/apache-maven-3.9.12/bin/mvn install'
-                         }}
-                stage('Deployment'){
-                    steps {
-                        script {
-                         if ( "${env.ENVIRONMENT}" == 'QA' ){
-                sh 'cp target/GRRAS.war /home/prajwal/Downloads/apache-tomcat-11.0.15/webapps'
-                echo "deployment has been done on QA!"
-                         }
-                        else if ( "${env.ENVIRONMENT}" == 'UAT' ){
-                sh 'cp target/GRRAS.war /home/prajwal/Downloads/apache-tomcat-11.0.15/webapps'
-                echo "deployment has been done on UAT!"
-                        }
-                        echo "deployment has been done!"
-                        fi
 
-                        }}}
-}}
+        stage('Build') {
+            steps {
+                sh '/home/prajwal/Downloads/apache-maven-3.9.12/bin/mvn install'
+            }
+        }
+
+        stage('Deployment') {
+            steps {
+                script {
+                    if ("${env.ENVIRONMENT}" == 'QA') {
+                        sh 'cp target/GRRAS.war /home/prajwal/Downloads/apache-tomcat-11.0.15/webapps'
+                        echo "Deployment has been done on QA!"
+                    } else if ("${env.ENVIRONMENT}" == 'UAT') {
+                        sh 'cp target/GRRAS.war /home/prajwal/Downloads/apache-tomcat-11.0.15/webapps'
+                        echo "Deployment has been done on UAT!"
+                    }
+                    echo "Deployment process completed!"
+                }
+            }
+        }
+    }
+}
 
